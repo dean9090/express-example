@@ -1,11 +1,15 @@
 const express = require('express')
+const mustacheExpress = require('mustache-express')
 
 const app = express()
 
 // Use the middleware (i.e plugin) for static files
 // and tell express they are in the 'public' folder
 app.use(express.static('public'))
-app.set('views', 'templates')
+
+app.engine('mustache', mustacheExpress())
+app.set('views', './templates')
+app.set('view engine', 'mustache')
 
 // app.get is similar to our old friend addEventListener
 // except we are listening for requests from a
@@ -43,12 +47,12 @@ app.get('/jason', (request, response) => {
 })
 
 app.get('/', (request, response) => {
-  response.send(`
-    Hello World
-    <p>
-      <a href="/jason">Tell me something about Jason</a>
-    </p>
-  `)
+  const data = {
+    currentTime: new Date(),
+    favoriteColor: 'Purple',
+    friends: [{ name: 'Jason' }, { name: 'Gavin' }, { name: 'Toni' }]
+  }
+  response.render('home', data)
 })
 
 app.listen(3000, () => {
