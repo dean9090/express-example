@@ -46,6 +46,20 @@ app.get('/jason', (request, response) => {
   `)
 })
 
+// Route with dynamic part.
+// If the user requests the url: /info/Gavin
+// this code will be called and `request.params.friendName` will be `Gavin`
+//
+// This is because we put `:friendName` as part of the URL below. That tells
+// express to match anything there, and call it `friendName`
+//
+app.get('/info/:friendName', (request, response) => {
+  const data = {
+    friendName: request.params.friendName
+  }
+  response.render('info', data)
+})
+
 app.get('/', (request, response) => {
   const data = {
     currentTime: new Date(),
